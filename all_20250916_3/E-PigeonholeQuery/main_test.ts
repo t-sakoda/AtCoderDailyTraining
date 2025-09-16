@@ -1,0 +1,41 @@
+import { assertEquals } from "@std/assert";
+import { Main } from "./main.ts";
+
+Deno.test(function addTest() {
+  assertEquals(Main([
+    "4 7",
+    "2",
+    "1 1 2",
+    "2",
+    "1 3 2",
+    "2",
+    "1 3 4",
+    "2"
+  ]), [
+    "0",
+    "1",
+    "1",
+    "2",
+  ].join("\n"));
+});
+
+Deno.test(function addTest() {
+  assertEquals(Main([
+    "5 10",
+    "2",
+    "1 4 3",
+    "1 4 5",
+    "2",
+    "1 3 1",
+    "2",
+    "1 2 3",
+    "1 2 5",
+    "1 1 3",
+    "2",
+  ]), [
+    "0",
+    "1",
+    "2",
+    "1",
+  ].join("\n"));
+});
