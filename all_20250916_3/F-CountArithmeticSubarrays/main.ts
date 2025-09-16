@@ -4,26 +4,17 @@ export function Main(input: string[]) {
   // A: 正整数列
   const A = input[1].split(" ").map(Number);
 
-  // 等差数列の組み合わせの個数を求める
+  // 等差数列の個数を求める
   let result = 0;
+  let runLength = 0; // 直近で等差になっている部分列の長さ
 
-  // l, r: Aの部分列の両端のインデックス
-  const check = (l: number, r: number): boolean => {
-    // 長さが1なら等差数列
-    if (r - l <= 1) return true;
-
-    // d: 公差
-    const d = A[l + 1] - A[l];
-    for (let i = l + 1; i < r; i++) {
-      if (A[i + 1] - A[i] !== d) return false;
+  for (let i = 0; i < N; i++) {
+    if (i < 2 || A[i] - A[i - 1] === A[i - 1] - A[i - 2]) {
+      runLength++;
+    } else {
+      runLength = 2;
     }
-    return true;
-  };
-
-  for (let l = 0; l < N; l++) {
-    for (let r = l; r < N; r++) {
-      if (check(l, r)) result++;
-    }
+    result += runLength;
   }
 
   return result.toString();
