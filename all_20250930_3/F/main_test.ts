@@ -1,0 +1,51 @@
+import { assertEquals } from "@std/assert";
+import { Main } from "./main.ts";
+
+Deno.test(function addTest() {
+  const input = `
+5 4
+2 1 2
+3 3 4 5
+3 1 2 5
+1 3
+1 3 2 5 4
+    `.split("\n").map((v) => v.trim()).filter((v) => v !== "");
+  const output = `
+0
+1
+2
+3
+4
+  `.split("\n").map((v) => v.trim()).filter((v) => v !== "");
+
+  assertEquals(Main(input), output.join("\n"));
+});
+
+Deno.test(function addTest() {
+  const input = `
+9 8
+1 4
+5 6 9 7 4 3
+4 2 4 1 3
+1 1
+5 7 9 8 1 5
+2 9 8
+1 2
+1 1
+6 5 2 7 8 4 1 9 3
+    `.split("\n").map((v) => v.trim()).filter((v) => v !== "");
+  const output = `
+0
+0
+1
+1
+1
+2
+4
+6
+8
+  `.split("\n").map((v) => v.trim()).filter((v) => v !== "");
+
+  assertEquals(Main(input), output.join("\n"));
+});
+
