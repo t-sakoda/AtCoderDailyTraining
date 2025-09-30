@@ -21,30 +21,34 @@ export function Main(input: string[]) {
 
   const results: number[] = []
 
-  // 食べられない料理とその食材の組み合わせを保存しておく
-  const dislikedDishes = new Map<number, Set<number>>();
-  for (let i = 0; i < M; i++) {
-    const [K, ...A] = rows[i];
-    dislikedDishes.set(i, new Set(A));
-  }
+  // 食材 -> 料理のマッピング
+  const ingredientToDishes = new Map<number, number[]>();
+  // 料理ごとの食材数
+  const dishToIngredientCount = new Array(M)
 
-  let count = 0;
-  for (let i = 0; i < N; i++) {
-    const ingredient = B[i];
-    // 克服した食材が使われている料理を探す
-    for (const [dishIndex, ingredients] of dislikedDishes) {
-      if (ingredients.has(ingredient)) {
-        // その料理から、克服した食材を取り除く
-        ingredients.delete(ingredient);
-        // その料理に使われている食材がなくなったら、すなわち食べられる料理とみなせる
-        if (ingredients.size === 0) {
-          // その料理を食べられる料理の数に加える
-          count++;
-          dislikedDishes.delete(dishIndex);
-        }
+  rows.forEach((row, dishIndex) => {
+    const [K, ...A] = row;
+    A.forEach((ingredient) => {
+      if (!ingredientToDishes.has(ingredient)) {
+        ingredientToDishes.set(ingredient, []);
       }
-    }
-    results.push(count);
+      const dishes = ingredientToDishes.get(ingredient)!;
+      dishes.push(dishIndex);
+    });
+    dishToIngredientCount[dishIndex] = K;
+  });
+
+  let count = 0
+  for (let day = 0; day < N; day++) {
+    const ingredient = B[day];
+    const dishes = ingredientToDishes.get(ingredient) || [];
+    dishes.forEach((dishIndex) => {
+      dishToIngredientCount[dishIndex]--;
+      if (dishToIngredientCount[dishIndex] === 0) {
+        count++;
+      }
+    });
+    results.push(count);;
   }
   return results.join("\n");
 }
