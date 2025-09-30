@@ -19,30 +19,29 @@ export function Main(input: string[]) {
 
   // N 行出力せよ。k 行目には、i = k のときの値を出力せよ。
 
-  const results: number[] = [];
+  const results: number[] = []
+
+  // 食べられない料理とその食材の組み合わせを保存しておく
+  const dislikedDishes = new Map<number, Set<number>>();
+  for (let i = 0; i < M; i++) {
+    const [K, ...A] = rows[i];
+    dislikedDishes.set(i, new Set(A));
+  }
+
+  let count = 0;
   for (let i = 0; i < N; i++) {
-    // i日目に食べられる料理の個数を数える
-    let count = 0;
-    for (let j = 0; j < M; j++) {
-      // 料理
-      const [K, ...A] = rows[j];
-
-      // K種類の食材が使われている
-      // 食材は A[0], A[1], ..., A[K-1]
-      // 食材の中に嫌いなものが一つでもあればたべられない
-
-      // 嫌いな食材は B[i+1], ..., B[N-1]
-      // 一致したものがなければ count++
-      let canEat = true;
-      for (let k = i + 1; k < N; k++) {
-        const disliked = B[k];
-        if (A.includes(disliked)) {
-          canEat = false;
-          break;
+    const ingredient = B[i];
+    // 克服した食材が使われている料理を探す
+    for (const [dishIndex, ingredients] of dislikedDishes) {
+      if (ingredients.has(ingredient)) {
+        // その料理から、克服した食材を取り除く
+        ingredients.delete(ingredient);
+        // その料理に使われている食材がなくなったら、すなわち食べられる料理とみなせる
+        if (ingredients.size === 0) {
+          // その料理を食べられる料理の数に加える
+          count++;
+          dislikedDishes.delete(dishIndex);
         }
-      }
-      if (canEat) {
-        count++;
       }
     }
     results.push(count);
