@@ -1,0 +1,26 @@
+export function Main(input: string[]) {
+  const [X, Y] = input[0].split(".").map((v) => Number(v));
+  // 実数X.Yが与えられる
+  // Yは一桁
+  // 0 <= Y <= 2ならば X-
+  // 3 <= Y <= 6ならば X
+  // 7 <= Y <= 9ならば X+
+
+  if (Y >= 0 && Y <= 2) {
+    return `${X}-`;
+  } else if (Y >= 3 && Y <= 6) {
+    return `${X}`;
+  } else {
+    return `${X}+`;
+  }
+}
+
+//*この行以降は提出するときに有効にする。
+/*
+const readInput = async (): Promise<string[]> => {
+  const input = await Deno.readTextFile("/dev/stdin");
+  return input.split("\n")
+};
+const input = await readInput();
+console.log(Main(input));
+*/
