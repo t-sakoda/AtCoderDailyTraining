@@ -12,22 +12,26 @@ export function Main(input: string[]) {
     for (let i = 0; i < cookies.length; i++) {
       const row = cookies[i];
       if (row.length < 2) continue;
-      if (row.every((cookie) => cookie.color === row[0].color)) {
+      const firstCookie = row.find((cookie) => !cookie.removed);
+      if (!firstCookie) continue;
+      if (row.every((cookie) => cookie.removed || cookie.color === row[0].color)) {
         for (let r = 0; r < row.length; r++) {
           row[r].removed = true;
-          changed = true;
         }
+        changed = true;
       }
     }
     const columnsNum = cookies[0]?.length || 0;
     for (let j = 0; j < columnsNum; j++) {
       const column = cookies.map((row) => row[j]);
       if (column.length < 2) continue;
-      if (column.every((cookie) => cookie.color === column[0].color)) {
+      const firstCookie = column.find((cookie) => !cookie.removed);
+      if (!firstCookie) continue;
+      if (column.every((cookie) => cookie.color === firstCookie.color)) {
         for (let r = 0; r < column.length; r++) {
           column[r].removed = true;
-          changed = true;
         }
+        changed = true;
       }
     }
     // 変更がなければ終了
@@ -49,7 +53,7 @@ export function Main(input: string[]) {
   // 残っているクッキーの枚数を数える
   let remaining = 0;
   for (let i = 0; i < cookies.length; i++) {
-    remaining += cookies[i].length;
+    remaining += cookies[i].filter((cookie) => !cookie.removed).length;
   }
   return remaining.toString();
 }
